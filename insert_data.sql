@@ -17,6 +17,10 @@ INSERT INTO xe(id_hang_xe, ten, bien_so, dong_xe, doi_xe, mo_ta) VALUES (1, 'Por
 INSERT INTO xe(id_hang_xe, ten, bien_so, dong_xe, doi_xe, mo_ta) VALUES (2, 'BMW I8', '30-V1 123.08', 'Cao cấp', 2021, 'Màu đỏ');
 INSERT INTO xe(id_hang_xe, ten, bien_so, dong_xe, doi_xe, mo_ta) VALUES (3, 'Mercedes GLC300', '59-H1 345.67', 'Cao cấp', 2020, 'Màu xám, đầy đủ tiện ích');
 
+INSERT INTO loi_vi_pham_hd(ten_vi_pham, gia_tri) VALUES ('Trả trễ 1 ngày', 150000);
+INSERT INTO loi_vi_pham_hd(ten_vi_pham, gia_tri) VALUES ('Trả trễ 2 ngày', 200000);
+INSERT INTO loi_vi_pham_hd(ten_vi_pham, gia_tri) VALUES ('Trả trễ 3 ngày', 350000);
+
 INSERT INTO doi_tac(ten_dt, dia_chi, so_dien_thoai, ghi_chu) VALUES ('Nguyễn Thành Nam', 'Quận 1, Hồ Chí Minh', '0339876546', '');
 INSERT INTO doi_tac(ten_dt, dia_chi, so_dien_thoai, ghi_chu) VALUES ('Quách Đình Bảo', 'Quận 5, Hồ Chí Minh', '02856555789', '');
 INSERT INTO doi_tac(ten_dt, dia_chi, so_dien_thoai, ghi_chu) VALUES ('Nguyễn Thị Quỳnh Hoa', 'Quận 7, Hồ Chí Minh', '0335646466', '');
@@ -32,9 +36,9 @@ VALUES (2, 2, 'HD005', 'Hợp đồng  thuê xe số 005', 2000000, '2021/11/20'
 INSERT INTO hop_dong_thue_xe_dt(id_dt, id_nhan_vien, ma_hd, noi_dung_hop_dong, gia_tri_thue, ngay_bat_dau, ngay_het_han) 
 VALUES (1, 1, 'HD006', 'Hợp đồng  thuê xe số 006', 2500000, '2021/11/22', '2021/11/30');
 
-INSERT INTO xe_thue_dt(id_xe, id_hop_dong, so_luong, don_gia) VALUES (1, 1, 2, 20000000);
-INSERT INTO xe_thue_dt(id_xe, id_hop_dong, so_luong, don_gia) VALUES (2, 2, 1, 10000000);
-INSERT INTO xe_thue_dt(id_xe, id_hop_dong, so_luong, don_gia) VALUES (3, 3, 3, 25000000);
+INSERT INTO xe_thue_dt(id_xe, id_hop_dong, id_loi, so_luong, don_gia) VALUES (1, 1, 1, 2, 20000000);
+INSERT INTO xe_thue_dt(id_xe, id_hop_dong, id_loi, so_luong, don_gia) VALUES (2, 2, 2,  1, 10000000);
+INSERT INTO xe_thue_dt(id_xe, id_hop_dong, id_loi, so_luong, don_gia) VALUES (3, 3, 3, 3, 25000000);
 
 INSERT INTO khach_hang(ten_kh, dia_chi, so_dien_thoai, ghi_chu) VALUES ('Nguyễn Thành Ngọc', 'Thanh Xuân, Hà Nội', '0334564556', '');
 INSERT INTO khach_hang(ten_kh, dia_chi, so_dien_thoai, ghi_chu) VALUES ('Nguyễn Thị Thảo', 'Quận 8, Hồ Chí Minh', '0339564713', '');
@@ -54,8 +58,6 @@ INSERT INTO xe_thue_kh(id_xe, id_hop_dong, so_luong, don_gia) VALUES (3, 3, 1, 5
 INSERT INTO hoa_don(id_kh, id_hop_dong, gia_tri, tong_tien_phat, vat, tong_thanh_toan) VALUES (1, 1, 1500000, 0, 100000, 1600000);
 INSERT INTO hoa_don(id_kh, id_hop_dong, gia_tri, tong_tien_phat, vat, tong_thanh_toan) VALUES (2, 2, 2500000, 0, 250000, 2750000);
 INSERT INTO hoa_don(id_kh, id_hop_dong, gia_tri, tong_tien_phat, vat, tong_thanh_toan) VALUES (3, 3, 2500000, 0, 250000, 2750000);
-
-INSERT INTO loi_vi_pham_hd(ten_vi_pham, gia_tri) VALUES ('Trả trễ 1 ngày', 150000);
 
 INSERT INTO vi_pham_hop_dong(id_loi, id_hoa_don) VALUES (1, 1);
 

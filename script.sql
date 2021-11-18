@@ -75,6 +75,7 @@ CREATE TABLE xe_thue_dt (
 	id int primary key auto_increment,
     id_xe int not null,
     id_hop_dong int not null,
+    id_loi int not null,
 	so_luong int,
     don_gia float
 );
@@ -153,6 +154,8 @@ ALTER TABLE vi_pham_hop_dong ADD CONSTRAINT fk_vi_pham_hop_dong_loi_vi_pham_hd F
 ALTER TABLE vi_pham_hop_dong ADD CONSTRAINT fk_vi_pham_hop_dong_hoa_don FOREIGN KEY (id_hoa_don) REFERENCES hoa_don(id);
 
 ALTER TABLE nhan_vien ADD CONSTRAINT fk_vi_nhan_vien_tai_khoan FOREIGN KEY (id_tai_khoan) REFERENCES tai_khoan(id);
+
+ALTER TABLE xe_thue_dt ADD CONSTRAINT fk_xe_thue_dt_loi_vi_pham FOREIGN KEY (id_loi) REFERENCES loi_vi_pham_hd(id);
 
 
 

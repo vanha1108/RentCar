@@ -8,5 +8,7 @@ import java.util.List;
 public interface PartnerContractService {
     List<PartnerContract> findStartDateBetween(Date fromDate, Date toDate);
 
+    List<PartnerContract> findByIdPartnerStartDateBetween(Long idPartner, Date fromDate, Date toDate);
+
     List<PartnerContract> findByIdPartner(Long idPartner);
 }

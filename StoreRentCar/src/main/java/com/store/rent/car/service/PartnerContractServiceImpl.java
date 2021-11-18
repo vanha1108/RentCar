@@ -20,6 +20,11 @@ public class PartnerContractServiceImpl implements PartnerContractService {
     }
 
     @Override
+    public List<PartnerContract> findByIdPartnerStartDateBetween(Long idPartner, Date fromDate, Date toDate) {
+        return partnerContractDAO.findByIdPartnerStartDateBetween(idPartner, fromDate, toDate);
+    }
+
+    @Override
     public List<PartnerContract> findByIdPartner(Long idPartner) {
         return partnerContractDAO.findByIdPartner(idPartner);
     }

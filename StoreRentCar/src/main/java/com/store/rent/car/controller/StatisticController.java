@@ -25,14 +25,19 @@ public class StatisticController {
         if (input == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        Date from = new SimpleDateFormat("yyyy/MM/dd").parse(input.getFromDate());
-        Date to = new SimpleDateFormat("yyyy/MM/dd").parse(input.getToDate());
+        Date from = new SimpleDateFormat("yyyy-MM-dd").parse(input.getFromDate());
+        Date to = new SimpleDateFormat("yyyy-MM-dd").parse(input.getToDate());
         List<PartnerDetailDTO> partnerDetailDTOS = service.getStatistic(from, to);
         return new ResponseEntity<>(partnerDetailDTOS, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> statisticDetails(@PathVariable("id") String idPartner) {
-        return new ResponseEntity<>(service.statisticDetails(Long.parseLong(idPartner)), HttpStatus.OK);
+    @PostMapping("/{id}")
+    public ResponseEntity<?> statisticDetails(@PathVariable("id") String idPartner, @RequestBody InputStatisticDTO input) throws ParseException {
+        if (input == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        Date from = new SimpleDateFormat("yyyy-MM-dd").parse(input.getFromDate());
+        Date to = new SimpleDateFormat("yyyy-MM-dd").parse(input.getToDate());
+        return new ResponseEntity<>(service.statisticDetails(Long.parseLong(idPartner), from, to), HttpStatus.OK);
     }
 }
