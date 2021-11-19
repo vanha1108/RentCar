@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Modal, ModalHeader, ModalFooter, ModalBody, Button } from "reactstrap";
@@ -8,6 +9,7 @@ export default class Statistical extends Component {
     this.state = {
       modal: false,
       dataStatistic: [],
+      dataDetail:[],
       dateStart: "",
       dateEnd: "",
     };
@@ -15,7 +17,25 @@ export default class Statistical extends Component {
 
   componentDidMount() {}
 
-  getAll = () => {};
+  detailStatistic = async(id) =>{
+    const { dateStart,dateEnd } = this.state
+    const data = {
+      fromDate: dateStart,
+      toDate: dateEnd,
+    };
+    await axios.post("/statistic/"+id,data)
+    .then((res) => {
+      console.log("res", res);
+      this.setState({
+        dataDetail: res.data,
+        modal:true
+      });
+    })
+    .catch((err) => {
+      console.log("err", err.response);
+      alert("Lỗi không lấy được data");
+    });
+  }
 
   toggle = () => {
     this.setState({
@@ -51,7 +71,7 @@ export default class Statistical extends Component {
   _updateField = (field) => (e) => this.setState({ [field]: e.target.value });
 
   viewModal = () => {
-    const { dataStatistic } = this.state;
+    const { dataDetail } = this.state;
     console.log("ada", this.state);
     return (
       <Modal
@@ -61,7 +81,7 @@ export default class Statistical extends Component {
       >
         <ModalHeader toggle={this.toggle}>Hóa đơn thanh toán</ModalHeader>
         <ModalBody>
-          <table className="table table-bordered table-striped">
+          {dataDetail.length>0?<table className="table table-bordered table-striped">
             <thead>
               <tr>
                 <th scope="col">Mã</th>
@@ -75,18 +95,23 @@ export default class Statistical extends Component {
               </tr>
             </thead>
             <tbody>
-              <tr style={{ cursor: "pointer" }}>
-                <th scope="row">1</th>
-                <td>dsad</td>
-                <td>dsfds</td>
-                <td>@mdo</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
+              {dataDetail.map((data,index)=>(
+                <tr key={index} style={{ cursor: "pointer" }}>
+                <th scope="row">{data.id}</th>
+                <td>{data.name}</td>
+                
+                <td>{`${moment(data.startDate).format('DD/MM/YYYY')}`}</td>
+                <td>{`${moment(data.endDate).format('DD/MM/YYYY')}`}</td>
+                <td>{data.countVehicle}</td>
+                <td>{data.totalMoney}</td>
+                <td>{data.violateMoney}</td>
+                <td>{data.totalMoney+data.violateMoney}</td>
               </tr>
+              ))}
+              
             </tbody>
-          </table>
+          </table>:<div className="fs-2 text-center mt-5">Không có dữ liệu trong thời gian trên</div>}
+          
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>
@@ -160,11 +185,7 @@ export default class Statistical extends Component {
                 <tbody>
                   {dataStatistic.map((data, index) => (
                       <tr
-                        onClick={() =>
-                          this.setState({
-                            modal: true,
-                          })
-                        }
+                        onClick={() => this.detailStatistic(data.id)}
                         style={{ cursor: "pointer" }}
                         key={index}
                       >
