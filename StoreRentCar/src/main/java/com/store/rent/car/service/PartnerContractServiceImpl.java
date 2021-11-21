@@ -7,12 +7,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PartnerContractServiceImpl implements PartnerContractService {
 
     @Autowired
     PartnerContractDAO partnerContractDAO;
+
+    @Override
+    public PartnerContract findById(Long idContract) {
+        Optional<PartnerContract> optionalPartnerContract = partnerContractDAO.findById(idContract);
+        if (optionalPartnerContract.isPresent()) {
+            return optionalPartnerContract.get();
+        }
+        return null;
+    }
 
     @Override
     public List<PartnerContract> findStartDateBetween(Date fromDate, Date toDate) {

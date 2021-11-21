@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
-public class StatisticImpl implements StatisticService {
+public class StatisticServiceImpl implements StatisticService {
 
     @Autowired
     PartnerService partnerService;
@@ -37,27 +37,33 @@ public class StatisticImpl implements StatisticService {
         if (partnerContracts == null || partnerContracts.size() <= 0) {
             return new ArrayList<>();
         }
-        for (PartnerContract partnerContract : partnerContracts) {
-            Partner partner = partnerService.findById(partnerContract.getIdPartner());
+        for (PartnerContract contract : partnerContracts) {
+            Partner partner = partnerService.findById(contract.getIdPartner());
             PartnerDetailDTO partnerDetailDTO = DTOMapper.toPartnerDetailDTO(partner);
             if (partnerDetailDTO != null) {
                 int countDate = 0;
                 BigDecimal revenues = BigDecimal.ZERO;
-                List<PartnerContract> partnerContractList = partnerContractService.findByIdPartner(partnerContract.getIdPartner());
-                if (partnerContractList != null && partnerContractList.size() > 0) {
-                    for (PartnerContract contract : partnerContractList) {
-                        revenues = revenues.add(new BigDecimal(contract.getValue()));
-                        countDate += Math.abs(ChronoUnit.DAYS.between(contract.getEndDate().toInstant(), contract.getStartDate().toInstant()));
+                if (contract != null) {
+                    revenues = revenues.add(new BigDecimal(contract.getValue()));
+                    VehiclePartner vehiclePartner = vehiclePartnerService.findByIdPartnerContract(contract.getId());
+                    if (vehiclePartner != null && vehiclePartner.getIdFault() != null) {
+                        Fault fault = faultService.findById(vehiclePartner.getIdFault());
+                        if (fault != null) {
+                            revenues = revenues.add(fault.getValue());
+                        }
                     }
-                    if(map.containsKey(partner.getId())) {
+                    countDate += Math.abs(ChronoUnit.DAYS.between(contract.getEndDate().toInstant(), contract.getStartDate().toInstant()));
+                    if (map.containsKey(partner.getId())) {
                         partnerDetailDTO = map.get(partner.getId());
                         partnerDetailDTO.setCountDate(partnerDetailDTO.getCountDate() + countDate);
                         partnerDetailDTO.setRevenues(partnerDetailDTO.getRevenues().add(revenues));
+                        partnerDetailDTO.setTurns(partnerDetailDTO.getTurns() + 1);
                     } else {
                         partnerDetailDTO.setCountDate(countDate);
                         partnerDetailDTO.setRevenues(revenues);
-                        partnerDetailDTO.setTurns(partnerContractList.size());
+                        partnerDetailDTO.setTurns(1);
                     }
+
                     map.put(partner.getId(), partnerDetailDTO);
                 }
             }
@@ -71,12 +77,12 @@ public class StatisticImpl implements StatisticService {
         List<ContractDetailDTO> contractDetailDTOS = new ArrayList<>();
 
         List<PartnerContract> partnerContractList = partnerContractService.findByIdPartnerStartDateBetween(idPartner, fromDate, toDate);
-        if(partnerContractList == null || partnerContractList.size() <= 0) {
+        if (partnerContractList == null || partnerContractList.size() <= 0) {
             return null;
         }
-        for(PartnerContract partnerContract: partnerContractList) {
+        for (PartnerContract partnerContract : partnerContractList) {
             ContractDetailDTO contractDetailDTO = new ContractDetailDTO();
-             contractDetailDTO = DTOMapper.toContractDetailDTO(partnerContract);
+            contractDetailDTO = DTOMapper.toContractDetailDTO(partnerContract);
             if (contractDetailDTO != null) {
                 VehiclePartner vehiclePartner = vehiclePartnerService.findByIdPartnerContract(partnerContract.getId());
                 Partner partner = partnerService.findById(partnerContract.getIdPartner());
@@ -84,7 +90,7 @@ public class StatisticImpl implements StatisticService {
                 if (fault != null) {
                     contractDetailDTO.setViolateMoney(fault.getValue());
                 }
-                if(partner != null) {
+                if (partner != null) {
                     contractDetailDTO.setName(partner.getName());
                 }
                 contractDetailDTO.setCountVehicle(vehiclePartner.getAmount());

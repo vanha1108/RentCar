@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 public interface PartnerContractService {
+
+    PartnerContract findById(Long idContract);
+
     List<PartnerContract> findStartDateBetween(Date fromDate, Date toDate);
 
     List<PartnerContract> findByIdPartnerStartDateBetween(Long idPartner, Date fromDate, Date toDate);
